@@ -3,6 +3,8 @@ import 'dart:io';
 class InspectionReport {
   String? id;
   String? reportNumber;
+  String? itemNumber;
+  String projectName;
   DateTime reportDate;
   String reportType;
   double? asphaltQuantity;
@@ -21,6 +23,8 @@ class InspectionReport {
   InspectionReport({
     this.id,
     this.reportNumber,
+    this.itemNumber,
+    this.projectName = 'مشروع صيانة شوارع وأرصفة محافظة الخرج',
     DateTime? reportDate,
     this.reportType = 'التشوه البصري',
     this.asphaltQuantity,
@@ -70,6 +74,8 @@ class InspectionReport {
     return {
       'id': id,
       'reportNumber': reportNumber,
+      'itemNumber': itemNumber,
+      'projectName': projectName,
       'reportDate': reportDate.toIso8601String(),
       'reportType': reportType,
       'asphaltQuantity': asphaltQuantity,
@@ -89,6 +95,8 @@ class InspectionReport {
     return InspectionReport(
       id: json['id'],
       reportNumber: json['reportNumber'],
+      itemNumber: json['itemNumber'],
+      projectName: json['projectName'] ?? 'مشروع صيانة شوارع وأرصفة محافظة الخرج',
       reportDate: DateTime.parse(json['reportDate']),
       reportType: json['reportType'] ?? 'التشوه البصري',
       asphaltQuantity: json['asphaltQuantity']?.toDouble(),

@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'assets/images/municipality_logo.png',
                                 width: 50,
                                 height: 50,
-                                errorBuilder: (_, __, ___) => Container(
+                                errorBuilder: (context, error, stackTrace) => Container(
                                   width: 50,
                                   height: 50,
                                   decoration: BoxDecoration(
@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'امانة حفر الباطن',
+                                      'بلدية محافظة الخرج',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
@@ -120,8 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     Text(
-                                      'ادارة صيانة الطرق',
-                                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                                      'وكالة المشاريع - الإدارة العامة للطرق',
+                                      style: TextStyle(color: Colors.white70, fontSize: 13),
                                     ),
                                   ],
                                 ),
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'assets/images/dac_logo.png',
                                 width: 50,
                                 height: 50,
-                                errorBuilder: (_, __, ___) => Container(
+                                errorBuilder: (context, error, stackTrace) => Container(
                                   width: 50,
                                   height: 50,
                                   decoration: BoxDecoration(

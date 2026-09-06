@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:droob_alittihad/main.dart';
+import 'package:droob_alittihad/screens/home_screen.dart';
 
 void main() {
-  testWidgets('App loads correctly', (WidgetTester tester) async {
-    await tester.pumpWidget(const DroobAlittihadApp());
-    expect(find.text('نموذج معاينة'), findsOneWidget);
+  testWidgets('HomeScreen loads correctly', (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+    expect(find.text('بلدية محافظة الخرج'), findsOneWidget);
   });
 }

@@ -113,15 +113,25 @@ class PdfService {
                       // Header text
                       pw.Expanded(
                         child: pw.Column(
+                          mainAxisAlignment: pw.MainAxisAlignment.center,
                           children: [
-                            pw.Text('امانة حفر الباطن',
-                                style: pw.TextStyle(font: ttfBold, fontSize: 14)),
-                            pw.Text('وكالة الخدمات',
-                                style: pw.TextStyle(font: ttfRegular, fontSize: 12)),
-                            pw.Text('ادارة التشغيل و الصيانة',
-                                style: pw.TextStyle(font: ttfRegular, fontSize: 12)),
-                            pw.Text('ادارة صيانة الطرق',
-                                style: pw.TextStyle(font: ttfRegular, fontSize: 12)),
+                            pw.Text(
+                              'المملكة العربية السعودية',
+                              style: pw.TextStyle(font: ttfBold, fontSize: 12),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                            pw.SizedBox(height: 3),
+                            pw.Text(
+                              'وزارة البلديات والإسكان-أمانة منطقة الرياض-بلدية محافظة الخرج',
+                              style: pw.TextStyle(font: ttfBold, fontSize: 10),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                            pw.SizedBox(height: 3),
+                            pw.Text(
+                              'وكالة المشاريع- الإدارة العامة للطرق',
+                              style: pw.TextStyle(font: ttfBold, fontSize: 11),
+                              textAlign: pw.TextAlign.center,
+                            ),
                           ],
                         ),
                       ),
@@ -133,10 +143,23 @@ class PdfService {
                   ),
                   pw.SizedBox(height: 10),
 
-                  // Title
+                  // Title & Project Name
                   pw.Text('نموذج معاينة',
-                      style: pw.TextStyle(font: ttfBold, fontSize: 18)),
-                  pw.SizedBox(height: 10),
+                      style: pw.TextStyle(font: ttfBold, fontSize: 16)),
+                  pw.SizedBox(height: 3),
+                  pw.Container(
+                    padding: const pw.EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+                    decoration: pw.BoxDecoration(
+                      color: PdfColors.grey100,
+                      border: pw.Border.all(color: PdfColors.grey400, width: 0.5),
+                      borderRadius: pw.BorderRadius.circular(4),
+                    ),
+                    child: pw.Text(
+                      report.projectName,
+                      style: pw.TextStyle(font: ttfBold, fontSize: 11, color: PdfColors.blue900),
+                    ),
+                  ),
+                  pw.SizedBox(height: 8),
 
                   // Images Row - Before on right, After on left
                   pw.Row(
@@ -148,7 +171,7 @@ class PdfService {
                         child: pw.Column(
                           children: [
                             pw.Container(
-                              height: 280,
+                              height: 260,
                               decoration: pw.BoxDecoration(
                                 border: pw.Border.all(color: PdfColors.grey400, width: 1.5),
                                 borderRadius: pw.BorderRadius.circular(8),
@@ -172,7 +195,7 @@ class PdfService {
                         child: pw.Column(
                           children: [
                             pw.Container(
-                              height: 280,
+                              height: 260,
                               decoration: pw.BoxDecoration(
                                 border: pw.Border.all(color: PdfColors.grey400, width: 1.5),
                                 borderRadius: pw.BorderRadius.circular(8),
@@ -195,8 +218,38 @@ class PdfService {
                   pw.SizedBox(height: 10),
 
                   // Data table (RTL order: right to left)
+                  // Row 0: Project Name
                   pw.Table(
-                    border: pw.TableBorder.all(color: PdfColors.grey600),
+                    border: const pw.TableBorder(
+                      left: pw.BorderSide(color: PdfColors.grey600),
+                      right: pw.BorderSide(color: PdfColors.grey600),
+                      top: pw.BorderSide(color: PdfColors.grey600),
+                      bottom: pw.BorderSide(color: PdfColors.grey600),
+                      verticalInside: pw.BorderSide(color: PdfColors.grey600),
+                    ),
+                    defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+                    columnWidths: {
+                      0: const pw.FlexColumnWidth(4.2),
+                      1: const pw.FlexColumnWidth(1.2),
+                    },
+                    children: [
+                      pw.TableRow(
+                        children: [
+                          _buildTableCell(report.projectName, ttfBold),
+                          _buildTableCell('اسم المشروع:', ttfBold),
+                        ],
+                      ),
+                    ],
+                  ),
+                  // Rows 1 to 4: Details Grid
+                  pw.Table(
+                    border: const pw.TableBorder(
+                      left: pw.BorderSide(color: PdfColors.grey600),
+                      right: pw.BorderSide(color: PdfColors.grey600),
+                      bottom: pw.BorderSide(color: PdfColors.grey600),
+                      horizontalInside: pw.BorderSide(color: PdfColors.grey600),
+                      verticalInside: pw.BorderSide(color: PdfColors.grey600),
+                    ),
                     defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
                     columnWidths: {
                       0: const pw.FlexColumnWidth(1.5),
@@ -205,40 +258,62 @@ class PdfService {
                       3: const pw.FlexColumnWidth(1.2),
                     },
                     children: [
-                      // Row 1: Report number and Report date
+                      // Row 1: Report number and Item number
                       pw.TableRow(
                         children: [
+                          _buildTableCell(report.itemNumber ?? '', ttfRegular),
+                          _buildTableCell('رقم البند:', ttfBold),
                           _buildTableCell(report.reportNumber ?? '', ttfRegular),
                           _buildTableCell('رقم البلاغ:', ttfBold),
+                        ],
+                      ),
+                      // Row 2: Report date and Report type
+                      pw.TableRow(
+                        children: [
+                          _buildTableCell(report.reportType, ttfRegular),
+                          _buildTableCell('نوع البلاغ:', ttfBold),
                           _buildTableCell(dateFormat.format(report.reportDate), ttfRegular),
                           _buildTableCell('تاريخ البلاغ :', ttfBold),
                         ],
                       ),
-                      // Row 2: Asphalt quantity and Report type
+                      // Row 3: Closure date and Asphalt quantity
                       pw.TableRow(
                         children: [
                           _buildTableCell('${report.asphaltQuantity?.toStringAsFixed(2) ?? ''} M²', ttfRegular),
                           _buildTableCell('كمية الاسفلت:', ttfBold),
-                          _buildTableCell(report.reportType, ttfRegular),
-                          _buildTableCell('نوع البلاغ:', ttfBold),
-                        ],
-                      ),
-                      // Row 3: Neighborhood and Closure date
-                      pw.TableRow(
-                        children: [
-                          _buildTableCell(report.neighborhood ?? '', ttfRegular),
-                          _buildTableCell('الحي:', ttfBold),
                           _buildTableCell(dateFormat.format(report.closureDate), ttfRegular),
                           _buildTableCell('تاريخ اقفال البلاغ :', ttfBold),
                         ],
                       ),
-                      // Row 4: Notes and Day
+                      // Row 4: Day and Neighborhood
+                      pw.TableRow(
+                        children: [
+                          _buildTableCell(report.neighborhood ?? '', ttfRegular),
+                          _buildTableCell('الحي:', ttfBold),
+                          _buildTableCell(report.dayName, ttfRegular),
+                          _buildTableCell('اليوم :', ttfBold),
+                        ],
+                      ),
+                    ],
+                  ),
+                  // Row 5: Notes attached table
+                  pw.Table(
+                    border: const pw.TableBorder(
+                      left: pw.BorderSide(color: PdfColors.grey600),
+                      right: pw.BorderSide(color: PdfColors.grey600),
+                      bottom: pw.BorderSide(color: PdfColors.grey600),
+                      verticalInside: pw.BorderSide(color: PdfColors.grey600),
+                    ),
+                    defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+                    columnWidths: {
+                      0: const pw.FlexColumnWidth(4.2),
+                      1: const pw.FlexColumnWidth(1.2),
+                    },
+                    children: [
                       pw.TableRow(
                         children: [
                           _buildTableCell(report.notes ?? '', ttfRegular),
                           _buildTableCell('الملاحظات:', ttfBold),
-                          _buildTableCell(report.dayName, ttfRegular),
-                          _buildTableCell('اليوم :', ttfBold),
                         ],
                       ),
                     ],

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
@@ -332,6 +331,24 @@ class _ReportsHistoryScreenState extends State<ReportsHistoryScreen> {
                                   ),
                                 ),
                               ),
+                              if (report.itemNumber != null && report.itemNumber!.isNotEmpty) ...[
+                                const SizedBox(width: 6),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF00897B).withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    'بند: ${report.itemNumber}',
+                                    style: const TextStyle(
+                                      color: Color(0xFF00897B),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
                               const Spacer(),
                               Text(
                                 dateFormat.format(report.reportDate),

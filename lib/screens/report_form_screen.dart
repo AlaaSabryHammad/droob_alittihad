@@ -19,7 +19,9 @@ class ReportFormScreen extends StatefulWidget {
 
 class _ReportFormScreenState extends State<ReportFormScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _projectNameController = TextEditingController(text: 'مشروع صيانة شوارع وأرصفة محافظة الخرج');
   final _reportNumberController = TextEditingController();
+  final _itemNumberController = TextEditingController();
   final _asphaltQuantityController = TextEditingController();
   final _neighborhoodController = TextEditingController();
   final _notesController = TextEditingController();
@@ -230,7 +232,11 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
     });
 
     try {
+      _report.projectName = _projectNameController.text.trim().isNotEmpty
+          ? _projectNameController.text.trim()
+          : 'مشروع صيانة شوارع وأرصفة محافظة الخرج';
       _report.reportNumber = _reportNumberController.text;
+      _report.itemNumber = _itemNumberController.text;
       _report.asphaltQuantity = double.tryParse(_asphaltQuantityController.text);
       _report.neighborhood = _neighborhoodController.text;
       _report.notes = _notesController.text;
@@ -344,7 +350,9 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
   void _resetForm() {
     setState(() {
       _report = InspectionReport();
+      _projectNameController.text = 'مشروع صيانة شوارع وأرصفة محافظة الخرج';
       _reportNumberController.clear();
+      _itemNumberController.clear();
       _asphaltQuantityController.clear();
       _neighborhoodController.clear();
       _notesController.clear();
@@ -482,33 +490,35 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
                       'assets/images/municipality_logo.png',
                       width: 50,
                       height: 50,
-                      errorBuilder: (_, __, ___) => Container(
+                      errorBuilder: (context, error, stackTrace) => Container(
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Icon(Icons.location_city, color: Colors.white),
                       ),
                     ),
                     const SizedBox(width: 12),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'امانة حفر الباطن',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'بلدية محافظة الخرج',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'ادارة صيانة الطرق',
-                          style: TextStyle(color: Colors.white70, fontSize: 12),
-                        ),
-                      ],
+                          Text(
+                            'وكالة المشاريع - الإدارة العامة للطرق',
+                            style: TextStyle(color: Colors.white70, fontSize: 12),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -519,11 +529,11 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
             'assets/images/dac_logo.png',
             width: 60,
             height: 60,
-            errorBuilder: (_, __, ___) => Container(
+            errorBuilder: (context, error, stackTrace) => Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: const Icon(Icons.business, color: Colors.white, size: 30),
@@ -680,12 +690,36 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
           ),
           const SizedBox(height: 24),
 
-          // رقم البلاغ
+          // اسم المشروع
           _buildLabeledTextField(
-            controller: _reportNumberController,
-            label: 'رقم البلاغ',
-            hint: 'أدخل رقم البلاغ',
-            icon: Icons.tag_rounded,
+            controller: _projectNameController,
+            label: 'اسم المشروع',
+            hint: 'مشروع صيانة شوارع وأرصفة محافظة الخرج',
+            icon: Icons.engineering_rounded,
+          ),
+          const SizedBox(height: 20),
+
+          // رقم البلاغ ورقم البند
+          Row(
+            children: [
+              Expanded(
+                child: _buildLabeledTextField(
+                  controller: _reportNumberController,
+                  label: 'رقم البلاغ',
+                  hint: 'أدخل رقم البلاغ',
+                  icon: Icons.tag_rounded,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildLabeledTextField(
+                  controller: _itemNumberController,
+                  label: 'رقم البند',
+                  hint: 'أدخل رقم البند',
+                  icon: Icons.numbers_rounded,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 20),
 
@@ -1074,7 +1108,9 @@ class _ReportFormScreenState extends State<ReportFormScreen> {
 
   @override
   void dispose() {
+    _projectNameController.dispose();
     _reportNumberController.dispose();
+    _itemNumberController.dispose();
     _asphaltQuantityController.dispose();
     _neighborhoodController.dispose();
     _notesController.dispose();
